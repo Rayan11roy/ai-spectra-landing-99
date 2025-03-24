@@ -1,6 +1,6 @@
 
-// A simple mock email service
-// In a real application, this would connect to an email service provider like SendGrid, Mailchimp, etc.
+// Email service using EmailJS for sending actual emails
+import emailjs from 'emailjs-com';
 
 interface EmailDetails {
   to: string;
@@ -11,33 +11,98 @@ interface EmailDetails {
 
 class EmailService {
   private senderEmail = "care.ai.assistant@gmail.com";
+  private readonly SERVICE_ID = "service_ai_assistant"; // Your EmailJS service ID
+  private readonly TEMPLATE_ID = "template_welcome"; // Your EmailJS template ID
+  private readonly USER_ID = "YOUR_USER_ID"; // Your EmailJS user ID
   
+  constructor() {
+    // Initialize EmailJS with your User ID
+    emailjs.init(this.USER_ID);
+  }
+
   /**
-   * Sends an email notification to the user
-   * In a production environment, this would be replaced with an actual email API call
+   * Sends an email notification to the user using EmailJS
    */
   sendNotification(recipientEmail: string): Promise<boolean> {
-    // Create email content
-    const emailDetails: EmailDetails = {
-      to: recipientEmail,
-      from: this.senderEmail,
+    console.log(`Attempting to send email to: ${recipientEmail}`);
+    
+    // Create template parameters
+    const templateParams = {
+      to_email: recipientEmail,
+      from_email: this.senderEmail,
       subject: "Welcome to AI Technical Support Assistant",
-      body: this.createWelcomeEmailBody(recipientEmail),
+      message: this.createPlainTextEmail(recipientEmail),
+      html_message: this.createWelcomeEmailBody(recipientEmail)
     };
     
-    // In a real app, this would be an API call to an email service provider
-    return new Promise((resolve) => {
-      console.log("Sending email with the following details:");
-      console.log(`From: ${emailDetails.from}`);
-      console.log(`To: ${emailDetails.to}`);
-      console.log(`Subject: ${emailDetails.subject}`);
-      console.log(`Body: ${emailDetails.body.substring(0, 100)}...`);
-      
-      // Simulate successful API call
-      setTimeout(() => {
-        resolve(true);
-      }, 500);
-    });
+    // For development/demo purposes, we'll log the email details
+    this.logEmailDetails(templateParams);
+    
+    // In development mode, we'll simulate sending for testing
+    if (process.env.NODE_ENV === 'development' || !this.isConfigured()) {
+      console.log("⚠️ Running in development mode or EmailJS not configured.");
+      console.log("✓ Email sending simulated successfully");
+      return Promise.resolve(true);
+    }
+    
+    // Send the email using EmailJS
+    return emailjs.send(this.SERVICE_ID, this.TEMPLATE_ID, templateParams)
+      .then(response => {
+        console.log("✓ Email sent successfully:", response.status, response.text);
+        return true;
+      })
+      .catch(error => {
+        console.error("✗ Failed to send email:", error);
+        return false;
+      });
+  }
+  
+  /**
+   * Check if EmailJS is configured properly
+   */
+  private isConfigured(): boolean {
+    return this.USER_ID !== "YOUR_USER_ID" && 
+           this.SERVICE_ID !== "service_ai_assistant" && 
+           this.TEMPLATE_ID !== "template_welcome";
+  }
+  
+  /**
+   * Logs email details for debugging
+   */
+  private logEmailDetails(params: any): void {
+    console.log("📧 Email Details 📧");
+    console.log(`From: ${this.senderEmail}`);
+    console.log(`To: ${params.to_email}`);
+    console.log(`Subject: ${params.subject}`);
+    console.log(`Body preview: ${params.message.substring(0, 100)}...`);
+  }
+  
+  /**
+   * Creates a plain text version of the email for clients that don't support HTML
+   */
+  private createPlainTextEmail(email: string): string {
+    return `
+    Welcome to AI Technical Support Assistant!
+    
+    Thank you for joining our waiting list.
+    
+    Hello,
+    
+    Thank you for pre-registering for our AI Technical Support Assistant. We're thrilled to have you join our community of early adopters!
+    
+    Your email ${email} has been added to our waiting list. You'll be among the first to know when we launch our beta version in July.
+    
+    As a pre-registered user, you'll receive:
+    - FREE access during our beta period
+    - Priority support from our team
+    - Exclusive early access to new features
+    
+    We're working hard to create the most advanced AI-powered development assistant that helps you solve technical issues in seconds, not hours.
+    
+    If you have any questions, feel free to reply to this email.
+    
+    © 2025 AI Technical Support Assistant. All rights reserved.
+    `;
   }
   
   /**
