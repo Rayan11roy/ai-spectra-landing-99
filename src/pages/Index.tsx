@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,9 +14,10 @@ const Index = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const { toast } = useToast();
-  const sphereRefs = useRef<HTMLDivElement[]>([]);
+  const sphereRefs = useRef<(HTMLDivElement | null)[]>([]);
   const cubeRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const rafRef = useRef<number | null>(null);
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -88,7 +90,7 @@ const Index = () => {
         sphere.style.transform = `translate(${Math.sin(time) * 15}px, ${Math.cos(time * 1.3) * 15}px) scale(${scale})`;
       });
       
-      requestAnimationFrame(animateSpheres);
+      rafRef.current = requestAnimationFrame(animateSpheres);
     };
     
     const animateCube = () => {
@@ -96,17 +98,25 @@ const Index = () => {
         const time = Date.now() * 0.001;
         cubeRef.current.style.transform = `rotateX(${time * 10}deg) rotateY(${time * 15}deg) rotateZ(${time * 5}deg)`;
       }
-      requestAnimationFrame(animateCube);
+      rafRef.current = requestAnimationFrame(animateCube);
     };
     
     animateSpheres();
     animateCube();
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   const createSpheres = () => {
     const spheres = [];
-    for (let i = 0; i < 5; i++) {
-      const size = isMobile ? (30 + Math.random() * 80) : (50 + Math.random() * 150);
+    const maxSpheres = isMobile ? 3 : 5; // Reduce number on mobile
+    
+    for (let i = 0; i < maxSpheres; i++) {
+      const size = isMobile ? (30 + Math.random() * 60) : (50 + Math.random() * 120); 
       const top = Math.random() * 100;
       const left = Math.random() * 100;
       
@@ -114,7 +124,7 @@ const Index = () => {
         <div
           key={i}
           ref={(el) => {
-            if (el) sphereRefs.current[i] = el;
+            sphereRefs.current[i] = el;
           }}
           className="sphere animate-pulse-glow"
           style={{
@@ -123,7 +133,7 @@ const Index = () => {
             top: `${top}%`,
             left: `${left}%`,
             animationDelay: `${i * 0.7}s`,
-            opacity: 0.3 + Math.random() * 0.4,
+            opacity: 0.2 + Math.random() * 0.3,
           }}
         />
       );
@@ -212,6 +222,7 @@ const Index = () => {
                     src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200&h=1200" 
                     alt="AI Technical Support Robot" 
                     className="w-full h-full object-cover object-center rounded-2xl animate-scale-up"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                   

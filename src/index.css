@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -40,23 +41,25 @@
   }
 
   html {
-    @apply scroll-smooth h-full;
+    @apply scroll-smooth h-full overscroll-none;
   }
 
   body {
     @apply bg-background text-foreground min-h-full;
     font-feature-settings: "ss01";
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20;
+    @apply bg-white/10 backdrop-filter backdrop-blur-lg rounded-2xl border border-white/20;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
   
   .red-glass-panel {
-    @apply bg-techred-500/10 backdrop-blur-lg rounded-2xl border border-techred-500/20;
+    @apply bg-techred-500/10 backdrop-filter backdrop-blur-lg rounded-2xl border border-techred-500/20;
     box-shadow: 0 4px 30px rgba(220, 38, 38, 0.2);
   }
   
@@ -85,12 +88,14 @@
   box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1), 0 0 15px rgba(220, 38, 38, 0.2);
   backdrop-filter: blur(5px);
   z-index: -1;
+  will-change: transform;
 }
 
 .cube {
   position: absolute;
   transform-style: preserve-3d;
   z-index: -1;
+  will-change: transform;
 }
 
 .cube-face {
@@ -99,12 +104,13 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2px);
+  will-change: transform;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 640px) {
   .cube, .sphere {
-    opacity: 0.6;
+    opacity: 0.4;
   }
 }
 
@@ -117,6 +123,7 @@
   transform: translate(-50%, -50%);
   border-radius: 50%;
   transition: opacity 0.3s ease;
+  will-change: transform;
 }
 
 .cursor-dot {
@@ -167,4 +174,16 @@ a, button, input, select, textarea,
   [role="button"], [tabindex="0"] {
     cursor: pointer;
   }
+}
+
+/* Hardware acceleration */
+.animate-pulse-glow,
+.animate-float,
+.animate-scale-up,
+.animate-slide-up,
+.animate-fade-in {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
 }
