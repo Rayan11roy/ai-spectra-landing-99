@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,13 +15,11 @@ const Index = () => {
   const cubeRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  // Validate email format
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -49,7 +46,6 @@ const Index = () => {
     setIsValid(true);
     setIsSubmitting(true);
     
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
@@ -59,10 +55,8 @@ const Index = () => {
       setEmail("");
     }, 1500);
   };
-  
-  // Animation for floating spheres
+
   useEffect(() => {
-    // Create spheres animation
     const animateSpheres = () => {
       sphereRefs.current.forEach((sphere, index) => {
         if (!sphere) return;
@@ -76,7 +70,6 @@ const Index = () => {
       requestAnimationFrame(animateSpheres);
     };
     
-    // Animate the 3D cube
     const animateCube = () => {
       if (cubeRef.current) {
         const time = Date.now() * 0.001;
@@ -88,8 +81,7 @@ const Index = () => {
     animateSpheres();
     animateCube();
   }, []);
-  
-  // Create spheres with different sizes and positions
+
   const createSpheres = () => {
     const spheres = [];
     for (let i = 0; i < 5; i++) {
@@ -117,8 +109,7 @@ const Index = () => {
     }
     return spheres;
   };
-  
-  // Create a 3D cube
+
   const createCube = () => {
     const size = isMobile ? 60 : 100;
     return (
@@ -132,7 +123,6 @@ const Index = () => {
           height: `${size}px`,
         }}
       >
-        {/* Front face */}
         <div 
           className="cube-face" 
           style={{
@@ -141,7 +131,6 @@ const Index = () => {
             transform: `translateZ(${size/2}px)`,
           }}
         />
-        {/* Back face */}
         <div 
           className="cube-face" 
           style={{
@@ -150,7 +139,6 @@ const Index = () => {
             transform: `translateZ(-${size/2}px) rotateY(180deg)`,
           }}
         />
-        {/* Left face */}
         <div 
           className="cube-face" 
           style={{
@@ -159,7 +147,6 @@ const Index = () => {
             transform: `translateX(-${size/2}px) rotateY(-90deg)`,
           }}
         />
-        {/* Right face */}
         <div 
           className="cube-face" 
           style={{
@@ -168,7 +155,6 @@ const Index = () => {
             transform: `translateX(${size/2}px) rotateY(90deg)`,
           }}
         />
-        {/* Top face */}
         <div 
           className="cube-face" 
           style={{
@@ -177,7 +163,6 @@ const Index = () => {
             transform: `translateY(-${size/2}px) rotateX(90deg)`,
           }}
         />
-        {/* Bottom face */}
         <div 
           className="cube-face" 
           style={{
@@ -192,14 +177,11 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-y-auto bg-gradient-to-br from-black via-slate-900 to-black">
-      {/* 3D Animation elements */}
       {createSpheres()}
       {createCube()}
       
-      {/* Main content container */}
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 py-12 min-h-screen flex flex-col justify-center">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 w-full">
-          {/* Left side: AI Robot Image and Visual Elements */}
           <div className="w-full md:w-1/2 relative animate-fade-in">
             <div className="relative">
               <div className="absolute inset-0 bg-techred-500/20 rounded-full blur-3xl opacity-50 animate-pulse-glow"></div>
@@ -212,24 +194,20 @@ const Index = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                   
-                  {/* Countdown overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <CountdownTimer />
                   </div>
                 </div>
               </div>
               
-              {/* Waiting list circle - positioned over the image */}
-              <div className="absolute -top-10 -right-10 sm:-top-20 sm:-right-20 transform scale-75 sm:scale-100 z-20">
+              <div className="absolute -top-4 left-0 right-0 mx-auto transform z-20 flex justify-center">
                 <WaitingListCircle />
               </div>
               
-              {/* Decorative elements */}
               <div className="absolute -bottom-3 -left-3 w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-techred-300/20 backdrop-blur-md animate-pulse-glow"></div>
             </div>
           </div>
           
-          {/* Right side: Text Content and Form */}
           <div className="w-full md:w-1/2 text-white relative z-10 animate-slide-up">
             <div className="space-y-4 sm:space-y-6 max-w-xl">
               <div>
@@ -245,7 +223,6 @@ const Index = () => {
                 </p>
               </div>
               
-              {/* Pre-registration form */}
               <div className="red-glass-panel p-5 sm:p-6 md:p-8 mt-6 sm:mt-8">
                 <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Join the waiting list</h3>
                 <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Be the first to experience our revolutionary AI support system. <span className="text-techred-300 font-medium">Pre-register now for FREE access during the beta period.</span></p>
