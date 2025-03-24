@@ -1,9 +1,11 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CountdownTimer from "@/components/CountdownTimer";
+import WaitingListCircle from "@/components/WaitingListCircle";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -217,8 +219,12 @@ const Index = () => {
                 </div>
               </div>
               
+              {/* Waiting list circle - positioned over the image */}
+              <div className="absolute -top-10 -right-10 sm:-top-20 sm:-right-20 transform scale-75 sm:scale-100 z-20">
+                <WaitingListCircle />
+              </div>
+              
               {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 rounded-full bg-techred-500/20 backdrop-blur-md animate-rotate-slow"></div>
               <div className="absolute -bottom-3 -left-3 w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-techred-300/20 backdrop-blur-md animate-pulse-glow"></div>
             </div>
           </div>
@@ -228,7 +234,7 @@ const Index = () => {
             <div className="space-y-4 sm:space-y-6 max-w-xl">
               <div>
                 <div className="bg-techred-600/20 text-techred-50 px-3 py-1 rounded-full inline-block text-sm font-medium mb-3 sm:mb-4">
-                  Coming Soon
+                  Coming July
                 </div>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tighter">
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">Technical Support</span>

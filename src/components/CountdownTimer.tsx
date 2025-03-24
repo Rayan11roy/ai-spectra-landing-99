@@ -22,11 +22,18 @@ const CountdownTimer = () => {
     }
   };
   
-  // Helper function to create and save a new target date
+  // Helper function to create and save a new target date to July
   const createAndSaveNewTargetDate = () => {
-    const now = new Date();
     const target = new Date();
-    target.setMonth(now.getMonth() + 3);
+    // Set to July 31st of current year
+    target.setMonth(6); // July is month 6 (zero-indexed)
+    target.setDate(31);
+    target.setHours(23, 59, 59, 999);
+    
+    // If July has already passed this year, set to next year
+    if (target <= new Date()) {
+      target.setFullYear(target.getFullYear() + 1);
+    }
     
     // Save to localStorage for persistence
     localStorage.setItem('launchTargetDate', target.toISOString());
@@ -69,7 +76,7 @@ const CountdownTimer = () => {
   return (
     <div className="red-glass-panel p-2 px-3 sm:p-3 rounded-lg">
       <div className="text-center">
-        <p className="text-xs font-medium text-gray-300 mb-1">Launching In</p>
+        <p className="text-xs font-medium text-gray-300 mb-1">Launching In <span className="text-techred-300">July</span></p>
         <div className="flex justify-center gap-2 sm:gap-3 text-white">
           <div className="flex flex-col items-center">
             <span className="font-bold text-sm sm:text-base">{formatNumber(timeLeft.days)}</span>
