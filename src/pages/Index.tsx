@@ -199,12 +199,6 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-              
-              <div className="absolute -top-4 left-0 right-0 mx-auto transform z-20 flex justify-center">
-                <WaitingListCircle />
-              </div>
-              
-              <div className="absolute -bottom-3 -left-3 w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-techred-300/20 backdrop-blur-md animate-pulse-glow"></div>
             </div>
           </div>
           
@@ -226,6 +220,8 @@ const Index = () => {
               <div className="red-glass-panel p-5 sm:p-6 md:p-8 mt-6 sm:mt-8">
                 <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Join the waiting list</h3>
                 <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Be the first to experience our revolutionary AI support system. <span className="text-techred-300 font-medium">Pre-register now for FREE access during the beta period.</span></p>
+                
+                <WaitingListCircle />
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -249,7 +245,7 @@ const Index = () => {
                     className="w-full bg-techred-600 hover:bg-techred-700 text-white red-glow-sm button-hover-effect"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Registering..." : "Pre-Register for Free Access"}
+                    {isSubmitting ? "Registering..." : "Pre-Register for FREE Access"}
                   </Button>
                 </form>
                 

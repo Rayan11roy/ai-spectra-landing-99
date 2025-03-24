@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
 
 type WaitingUser = {
   id: number;
@@ -22,7 +21,7 @@ const WaitingListCircle = () => {
   const joinedCount = 243; // Example count - you can replace with actual count
 
   return (
-    <div className="relative w-full max-w-[320px] h-auto mx-auto">
+    <div className="relative w-full max-w-[280px] h-auto mx-auto mb-4">
       <div className="flex items-center gap-0 relative">
         {/* User avatars in overlapping style */}
         {waitingUsers.map((user, index) => (
@@ -35,10 +34,10 @@ const WaitingListCircle = () => {
             }}
           >
             <Avatar 
-              className={`border-2 border-techred-500/40 ${index === 0 ? 'bg-techred-500' : index === 1 ? 'bg-blue-500' : 'bg-yellow-500'} w-12 h-12 md:w-14 md:h-14 text-white transition-all duration-300 hover:scale-110`}
+              className={`border-2 border-techred-500/40 ${index === 0 ? 'bg-techred-500' : index === 1 ? 'bg-blue-500' : 'bg-yellow-500'} w-10 h-10 text-white transition-all duration-300 hover:scale-110`}
             >
               {index === 0 && (
-                <div className="absolute inset-0 flex items-center justify-center font-bold text-xs md:text-sm">
+                <div className="absolute inset-0 flex items-center justify-center font-bold text-xs">
                   {joinedCount}+
                 </div>
               )}
@@ -55,8 +54,8 @@ const WaitingListCircle = () => {
         ))}
         
         {/* Text content */}
-        <div className="ml-3 flex-1">
-          <p className="text-sm md:text-base text-white/90 font-medium">
+        <div className="ml-2 flex-1">
+          <p className="text-sm text-white/90 font-medium">
             Join <span className="text-white font-bold">{joinedCount}+</span> tech fans already waiting
           </p>
         </div>
