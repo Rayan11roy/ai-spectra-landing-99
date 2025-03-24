@@ -40,8 +40,12 @@
     @apply border-border;
   }
 
+  html {
+    @apply scroll-smooth h-full;
+  }
+
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply bg-background text-foreground min-h-full;
     font-feature-settings: "ss01";
   }
 }
@@ -96,4 +100,11 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .cube, .sphere {
+    opacity: 0.6;
+  }
 }

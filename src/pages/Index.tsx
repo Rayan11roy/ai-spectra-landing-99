@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +13,7 @@ const Index = () => {
   const { toast } = useToast();
   const sphereRefs = useRef<HTMLDivElement[]>([]);
   const cubeRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   // Validate email format
   const validateEmail = (email: string) => {
@@ -89,7 +92,7 @@ const Index = () => {
   const createSpheres = () => {
     const spheres = [];
     for (let i = 0; i < 5; i++) {
-      const size = 50 + Math.random() * 150;
+      const size = isMobile ? (30 + Math.random() * 80) : (50 + Math.random() * 150);
       const top = Math.random() * 100;
       const left = Math.random() * 100;
       
@@ -116,7 +119,7 @@ const Index = () => {
   
   // Create a 3D cube
   const createCube = () => {
-    const size = 100;
+    const size = isMobile ? 60 : 100;
     return (
       <div
         ref={cubeRef}
@@ -187,19 +190,19 @@ const Index = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-black via-slate-900 to-black">
+    <div className="relative min-h-screen w-full overflow-y-auto bg-gradient-to-br from-black via-slate-900 to-black">
       {/* 3D Animation elements */}
       {createSpheres()}
       {createCube()}
       
       {/* Main content container */}
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 h-screen flex items-center justify-center">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 py-12 min-h-screen flex flex-col justify-center">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 w-full">
           {/* Left side: AI Robot Image and Visual Elements */}
           <div className="w-full md:w-1/2 relative animate-fade-in">
             <div className="relative">
               <div className="absolute inset-0 bg-techred-500/20 rounded-full blur-3xl opacity-50 animate-pulse-glow"></div>
-              <div className="red-glass-panel p-6 relative animate-float">
+              <div className="red-glass-panel p-4 sm:p-6 relative animate-float">
                 <div className="relative z-10 aspect-square overflow-hidden rounded-3xl">
                   <img 
                     src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200&h=1200" 
@@ -207,35 +210,40 @@ const Index = () => {
                     className="w-full h-full object-cover object-center rounded-2xl animate-scale-up"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                  
+                  {/* Countdown overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <CountdownTimer />
+                  </div>
                 </div>
               </div>
               
               {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-techred-500/20 backdrop-blur-md animate-rotate-slow"></div>
-              <div className="absolute -bottom-3 -left-3 w-16 h-16 rounded-full bg-techred-300/20 backdrop-blur-md animate-pulse-glow"></div>
+              <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 rounded-full bg-techred-500/20 backdrop-blur-md animate-rotate-slow"></div>
+              <div className="absolute -bottom-3 -left-3 w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-techred-300/20 backdrop-blur-md animate-pulse-glow"></div>
             </div>
           </div>
           
           {/* Right side: Text Content and Form */}
           <div className="w-full md:w-1/2 text-white relative z-10 animate-slide-up">
-            <div className="space-y-6 max-w-xl">
+            <div className="space-y-4 sm:space-y-6 max-w-xl">
               <div>
-                <div className="bg-techred-600/20 text-techred-50 px-3 py-1 rounded-full inline-block text-sm font-medium mb-4">
+                <div className="bg-techred-600/20 text-techred-50 px-3 py-1 rounded-full inline-block text-sm font-medium mb-3 sm:mb-4">
                   Coming Soon
                 </div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tighter">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tighter">
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">Technical Support</span>
                   <span className="block text-techred-500">AI Assistant</span>
                 </h1>
-                <p className="mt-4 text-lg text-gray-300 leading-relaxed">
+                <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-300 leading-relaxed">
                   The next generation AI-powered development assistant that helps you solve technical issues in seconds, not hours.
                 </p>
               </div>
               
               {/* Pre-registration form */}
-              <div className="red-glass-panel p-6 md:p-8 mt-8">
-                <h3 className="text-xl font-semibold mb-4">Join the waiting list</h3>
-                <p className="text-gray-300 mb-6">Be the first to experience our revolutionary AI support system.</p>
+              <div className="red-glass-panel p-5 sm:p-6 md:p-8 mt-6 sm:mt-8">
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Join the waiting list</h3>
+                <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Be the first to experience our revolutionary AI support system.</p>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
