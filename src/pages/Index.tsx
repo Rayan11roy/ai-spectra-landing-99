@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -243,7 +242,7 @@ const Index = () => {
               {/* Pre-registration form */}
               <div className="red-glass-panel p-5 sm:p-6 md:p-8 mt-6 sm:mt-8">
                 <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Join the waiting list</h3>
-                <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Be the first to experience our revolutionary AI support system.</p>
+                <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Be the first to experience our revolutionary AI support system. <span className="text-techred-300 font-medium">Pre-register now for FREE access during the beta period.</span></p>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -267,7 +266,7 @@ const Index = () => {
                     className="w-full bg-techred-600 hover:bg-techred-700 text-white red-glow-sm button-hover-effect"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Registering..." : "Pre-Register Now"}
+                    {isSubmitting ? "Registering..." : "Pre-Register for Free Access"}
                   </Button>
                 </form>
                 

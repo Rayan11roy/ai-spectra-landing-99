@@ -2,11 +2,34 @@
 import React, { useState, useEffect } from 'react';
 
 const CountdownTimer = () => {
-  // Set the launch date to 3 months from now
+  // Set up persistent target date that doesn't reset on page reload
   const calculateTargetDate = () => {
+    // Check if we have a saved target date in localStorage
+    const savedTargetDate = localStorage.getItem('launchTargetDate');
+    
+    if (savedTargetDate) {
+      const parsedDate = new Date(savedTargetDate);
+      
+      // Validate the parsed date - if it's invalid or in the past, create a new one
+      if (isNaN(parsedDate.getTime()) || parsedDate <= new Date()) {
+        return createAndSaveNewTargetDate();
+      }
+      
+      return parsedDate;
+    } else {
+      // No saved date, create a new one
+      return createAndSaveNewTargetDate();
+    }
+  };
+  
+  // Helper function to create and save a new target date
+  const createAndSaveNewTargetDate = () => {
     const now = new Date();
     const target = new Date();
     target.setMonth(now.getMonth() + 3);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('launchTargetDate', target.toISOString());
     return target;
   };
 
