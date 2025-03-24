@@ -5,6 +5,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CountdownTimer from "@/components/CountdownTimer";
 import WaitingListCircle from "@/components/WaitingListCircle";
+import { databaseService } from "@/services/databaseService";
+import { emailService } from "@/services/emailService";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +22,7 @@ const Index = () => {
     return re.test(email);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email) {
@@ -46,14 +48,33 @@ const Index = () => {
     setIsValid(true);
     setIsSubmitting(true);
     
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const isStored = await databaseService.storeEmail(email);
+      
+      if (isStored) {
+        await emailService.sendNotification(email);
+        
+        toast({
+          title: "Pre-registration successful!",
+          description: "Thank you for your interest. We'll notify you when we launch.",
+        });
+      } else {
+        toast({
+          title: "Already registered",
+          description: "This email is already on our waiting list. Thank you for your interest!",
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Pre-registration successful!",
-        description: "Thank you for your interest. We'll notify you when we launch.",
+        title: "Registration failed",
+        description: "There was a problem with your registration. Please try again later.",
+        variant: "destructive",
       });
+      console.error("Registration error:", error);
+    } finally {
+      setIsSubmitting(false);
       setEmail("");
-    }, 1500);
+    }
   };
 
   useEffect(() => {
@@ -245,13 +266,27 @@ const Index = () => {
                     className="w-full bg-techred-600 hover:bg-techred-700 text-white red-glow-sm button-hover-effect"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Registering..." : "Pre-Register for FREE Access"}
+                    {isSubmitting ? 
+                      <div className="flex items-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                      </div> 
+                      : "Pre-Register for FREE Access"
+                    }
                   </Button>
                 </form>
                 
-                <p className="text-xs text-gray-400 mt-4">
-                  By submitting, you agree to our privacy policy and terms of service.
-                </p>
+                <div className="mt-4 text-xs text-gray-400">
+                  <p>By submitting, you agree to our privacy policy and terms of service.</p>
+                  <p className="mt-2 border-t border-white/10 pt-2">
+                    <span className="text-techred-300">✓</span> Instant email confirmation
+                    <span className="mx-2">•</span>
+                    <span className="text-techred-300">✓</span> Priority access to beta
+                  </p>
+                </div>
               </div>
             </div>
           </div>
